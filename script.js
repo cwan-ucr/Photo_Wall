@@ -229,4 +229,25 @@ window.onload = function () {
 
     leftArrow.style.display = 'none';
     rightArrow.style.display = 'none';
+
+    // ==== 初始化背景音乐播放和切换 ====
+    const audio = document.getElementById('bgm');
+    const selector = document.getElementById('bgmSelector');
+
+    // 设置初始播放
+    audio.src = selector.value;
+
+    // 用户首次交互后播放（防止浏览器拦截）
+    document.body.addEventListener('click', () => {
+        audio.play().catch(() => {
+            console.log("浏览器阻止了自动播放，需要用户交互");
+        });
+    }, { once: true });
+
+    // 切换 BGM 时更新音源并播放
+    selector.addEventListener('change', function () {
+        audio.src = this.value;
+        audio.play();
+    });
+    
 };
