@@ -274,3 +274,81 @@ body::before {
 .container a:hover {
     color: #2b2b2b;
 }
+
+/* 留言板样式 */
+#guestbook {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(255, 105, 140, 0.1);
+}
+
+.message-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+#messageText {
+    height: 100px;
+    padding: 12px;
+    border: 1px solid #ffc0cb;
+    border-radius: 10px;
+    resize: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#userName {
+    padding: 10px;
+    border: 1px solid #ffc0cb;
+    border-radius: 5px;
+}
+
+#submitMessage {
+    background: #ff6f61;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#submitMessage:hover {
+    background: #ff4757;
+    transform: translateY(-2px);
+}
+
+.message-bubble {
+    background: #fff9fa;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    border: 1px solid #ffecef;
+}
+
+.message-bubble::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: #ffecef transparent;
+}
+
+.message-author {
+    font-weight: bold;
+    color: #ff6f61;
+    margin-bottom: 5px;
+}
+
+.message-date {
+    font-size: 12px;
+    color: #aaa;
+    text-align: right;
+}

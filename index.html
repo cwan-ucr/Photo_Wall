@@ -9,6 +9,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="readme_img/favicon//favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="readme_img/favicon//favicon-16x16.png">
     <link rel="manifest" href="readme_img/favicon//site.webmanifest">
+    <!-- 添加到index.html的<head>部分 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 </head>
 <body>
     <canvas id="heartCanvas"></canvas>
@@ -60,6 +64,17 @@
                 <p>2025.06.16</p> <!--**Love date**-->
                 <span>Anniversary</span>
             </div>
+        </section>
+
+        <!-- 在 <main> 标签内新增一个section -->
+        <section id="guestbook">
+            <h2>心灵墙角</h2>
+            <div class="message-input">
+                <textarea id="messageText" placeholder="写下你的想法... (限200字)" maxlength="200"></textarea>
+                <input type="text" id="userName" placeholder="你的名字（可选）">
+                <button id="submitMessage">❤ 发送留言</button>
+            </div>
+            <div id="messagesContainer"></div>
         </section>
 
         <section id="gallery">

@@ -251,3 +251,62 @@ window.onload = function () {
     });
     
 };
+
+// 配置Firebase（替换为你自己的配置）
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// 初始化Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// 留言提交处理
+document.getElementById('submitMessage').addEventListener('click', () => {
+    const message = document.getElementById('messageText').value.trim();
+    const name = document.getElementById('userName').value.trim() || "匿名";
+
+    if (message) {
+        // 提交到Firebase
+        database.ref('messages').push({
+            text: message,
+            author: name,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+
+        // 清空输入框
+        document.getElementById('messageText').value = '';
+    } else {
+        alert('留言内容不能为空哦~');
+    }
+});
+
+// 实时加载留言
+database.ref('messages').orderByChild('timestamp').limitToLast(50).on('value', (snapshot) => {
+    const messagesContainer = document.getElementById('messagesContainer');
+    messagesContainer.innerHTML = '';
+
+    snapshot.forEach((childSnapshot) => {
+        const msg = childSnapshot.val();
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message-bubble';
+        messageElement.innerHTML = `
+            <div class="message-author">${msg.author}</div>
+            <div class="message-text">${msg.text}</div>
+            <div class="message-date">${formatDate(msg.timestamp)}</div>
+        `;
+        messagesContainer.prepend(messageElement); // 新留言显示在最上面
+    });
+});
+
+// 时间格式化辅助函数
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    return `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
