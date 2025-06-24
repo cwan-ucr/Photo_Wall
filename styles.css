@@ -275,11 +275,40 @@ body::before {
     color: #2b2b2b;
 }
 
-/* ======= 新增导航栏样式 ======= */
+/* ==== 导航栏样式 ==== */
+nav {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    padding: 10px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 28px;
+    color: #ff6f61;
+    margin: 0;
+    padding: 0;
+}
+
 .nav-buttons {
     display: flex;
     gap: 15px;
-    margin-top: 10px;
 }
 
 .nav-button {
@@ -287,10 +316,11 @@ body::before {
     text-decoration: none;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    padding: 5px 15px;
+    padding: 8px 16px;
     border-radius: 20px;
     transition: all 0.3s;
     border: 2px solid #ff6f61;
+    font-size: 14px;
 }
 
 .nav-button:hover {
