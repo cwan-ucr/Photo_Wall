@@ -275,39 +275,57 @@ body::before {
     color: #2b2b2b;
 }
 
-/* 留言板样式 */
-#guestbook {
+/* ======= 新增导航栏样式 ======= */
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.nav-button {
+    color: #ff6f61;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 20px;
+    transition: all 0.3s;
+    border: 2px solid #ff6f61;
+}
+
+.nav-button:hover {
+    background-color: #ff6f61;
+    color: white;
+}
+
+.nav-button.active {
+    background-color: #ff6f61;
+    color: white;
+}
+
+/* ======= 留言板专属样式 ======= */
+.message-board {
     max-width: 800px;
     margin: 40px auto;
     padding: 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(255, 105, 140, 0.1);
 }
 
 .message-input {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 #messageText {
     height: 100px;
-    padding: 12px;
-    border: 1px solid #ffc0cb;
+    padding: 15px;
     border-radius: 10px;
+    border: 1px solid #ffb6c1;
     resize: none;
-    font-family: 'Montserrat', sans-serif;
 }
 
-#userName {
-    padding: 10px;
-    border: 1px solid #ffc0cb;
-    border-radius: 5px;
-}
-
-#submitMessage {
+#submitMessage, #exportMessages {
     background: #ff6f61;
     color: white;
     border: none;
@@ -317,38 +335,14 @@ body::before {
     transition: all 0.3s;
 }
 
-#submitMessage:hover {
-    background: #ff4757;
-    transform: translateY(-2px);
+#exportMessages {
+    background: #4CAF50;
 }
 
 .message-bubble {
-    background: #fff9fa;
+    background: rgba(255, 182, 193, 0.1);
     border-radius: 15px;
     padding: 15px;
     margin-bottom: 15px;
-    position: relative;
-    border: 1px solid #ffecef;
-}
-
-.message-bubble::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: 20px;
-    border-width: 0 10px 10px;
-    border-style: solid;
-    border-color: #ffecef transparent;
-}
-
-.message-author {
-    font-weight: bold;
-    color: #ff6f61;
-    margin-bottom: 5px;
-}
-
-.message-date {
-    font-size: 12px;
-    color: #aaa;
-    text-align: right;
+    border-left: 3px solid #ff6f61;
 }
