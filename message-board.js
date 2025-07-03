@@ -98,9 +98,11 @@ document.addEventListener('DOMContentLoaded', function () {
             messagesContainer.appendChild(messageEl);
 
             // first load comments
-            db.child(id).child('comments').once('value', snap => {
-                renderComments(snap.val() || {});
-            });
+            setTimeout(() => {
+                db.child(id).child('comments').once('value', snap => {
+                    renderComments(snap.val() || {});
+                });
+            }, 0);
         }
 
         // 点赞和评论删除功能
