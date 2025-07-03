@@ -5,22 +5,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitBtn = document.getElementById('submitMessage');
     const exportBtn = document.getElementById('exportMessages');
 
-    // 替换为你自己的 Firebase 配置
+    // Firebase 配置（已与你的实际项目匹配）
     const firebaseConfig = {
         apiKey: "AIzaSyAhD0Kbk6EZqqCN1L-G8_9OiMlNVhyu7uA",
         authDomain: "love-guestbook.firebaseapp.com",
         databaseURL: "https://love-guestbook-default-rtdb.firebaseio.com",
         projectId: "love-guestbook",
-        storageBucket: "love-guestbook.firebasestorage.app",
+        storageBucket: "love-guestbook.appspot.com",
         messagingSenderId: "976044421335",
         appId: "1:976044421335:web:89c2c62f91e3d3af9a0092"
     };
 
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-    // 初始化 Firebase
+    // 初始化 Firebase（使用 v8 语法）
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database().ref('messages');
 
@@ -53,7 +49,7 @@ const analytics = getAnalytics(app);
                 author,
                 timestamp: Date.now()
             };
-            db.push(newMsg); // 推送到 Firebase
+            db.push(newMsg);
             messageInput.value = '';
             nameInput.value = '';
 
