@@ -384,3 +384,39 @@ body {
     background-color: #f4f4f4;
     min-height: 100vh;
 }
+
+.message-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.message-actions button {
+    font-size: 14px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.like-btn {
+    background-color: #ffe4e1;
+    color: #c0392b;
+}
+
+.like-btn:hover {
+    background-color: #ffcac2;
+}
+
+.delete-btn {
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+.delete-btn:hover {
+    background-color: #f8d7da;
+    color: #c0392b;
+}
