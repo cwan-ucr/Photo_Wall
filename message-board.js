@@ -28,13 +28,43 @@ document.addEventListener('DOMContentLoaded', function () {
             const msg = data[id];
             const messageEl = document.createElement('div');
             messageEl.className = 'message-bubble';
+
             messageEl.innerHTML = `
                 <div class="message-author">${msg.author}</div>
                 <div class="message-text">${msg.text}</div>
                 <div class="message-date">${new Date(msg.timestamp).toLocaleString()}</div>
+                <div class="message-actions">
+                    <button class="like-btn" data-id="${id}">❤️ ${msg.likes || 0}</button>
+                    <button class="delete-btn" data-id="${id}">🗑 delete</button>
+                </div>
             `;
             messagesContainer.appendChild(messageEl);
         }
+        // 点赞和评论删除功能
+        const likeButtons = document.querySelectorAll('.like-btn');
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        likeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                const messageRef = db.child(id);
+                messageRef.transaction(msg => {
+                    if (msg) {
+                        msg.likes = (msg.likes || 0) + 1;
+                    }
+                    return msg;
+                });
+            });
+        });
+
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                if (confirm("Are you sure you want to delete this message?")) {
+                    db.child(id).remove();
+                }
+            });
+        });
     });
 
     // 提交留言
@@ -47,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const newMsg = {
                 text,
                 author,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                likes: 0 // 默认点赞数为 0
             };
             db.push(newMsg);
             messageInput.value = '';
