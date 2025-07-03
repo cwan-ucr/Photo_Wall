@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const commentList = document.createElement('div');
             commentList.className = 'comment-list';
+            commentList.setAttribute('data-id', id);
 
             // comment list template
             const commentForm = document.createElement('div');
@@ -50,36 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const toggleBtn = document.createElement('button');
             toggleBtn.className = 'toggle-comments';
             toggleBtn.style.display = 'none';
-            let showAll = false;
-
-            function renderComments(commentsData) {
-                commentList.innerHTML = '';
-                const keys = Object.keys(commentsData || {});
-                const shouldCollapse = keys.length > 2;
-
-                keys.sort((a, b) => commentsData[a].timestamp - commentsData[b].timestamp);
-
-                keys.forEach((cid, idx) => {
-                    const c = commentsData[cid];
-                    const commentItem = document.createElement('div');
-                    commentItem.className = 'comment-item';
-                    commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
-                    if (shouldCollapse && !showAll && idx >= 2) {
-                        commentItem.style.display = 'none';
-                    }
-                    commentList.appendChild(commentItem);
-                });
-
-                toggleBtn.style.display = shouldCollapse ? 'inline-block' : 'none';
-                toggleBtn.innerText = showAll ? 'Fold the last comments' : 'View all comments';
-            }
-
-            toggleBtn.addEventListener('click', () => {
-                showAll = !showAll;
-                db.child(id).child('comments').once('value', snap => {
-                    renderComments(snap.val());
-                });
-            });
+            toggleBtn.setAttribute('data-id', id)
+            toggleBtn.innerText = 'View all comments';
 
             messageEl.innerHTML = `
                 <div class="message-author">${msg.author}</div>
@@ -100,7 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // first load comments
             setTimeout(() => {
                 db.child(id).child('comments').once('value', snap => {
-                    renderComments(snap.val() || {});
+                    const commentListEl = document.querySelector(`.comment-list[data-id="${id}"]`);
+                    const toggleBtnEl = document.querySelector(`.toggle-comments[data-id="${id}"]`);
+                    renderComments(snap.val() || {}, commentListEl, toggleBtnEl, false);
                 });
             }, 0);
         }
@@ -130,7 +105,45 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
+
+        // 评论折叠展开
+        messagesContainer.addEventListener('click', function (e) {
+            if (e.target.classList.contains('toggle-comments')) {
+                const id = e.target.getAttribute('data-id');
+                const commentListEl = document.querySelector(`.comment-list[data-id="${id}"]`);
+                const isExpanded = e.target.getAttribute('data-expanded') === 'true';
+                db.child(id).child('comments').once('value', snap => {
+                    renderComments(snap.val() || {}, commentListEl, e.target, !isExpanded);
+                });
+                e.target.setAttribute('data-expanded', String(!isExpanded));
+            }
+        });
     });
+
+    // 评论渲染函数（带折叠控制）
+    function renderComments(commentsData, commentList, toggleBtn, showAll) {
+        commentList.innerHTML = '';
+        const keys = Object.keys(commentsData);
+        const shouldCollapse = keys.length > 2;
+
+        keys.sort((a, b) => commentsData[a].timestamp - commentsData[b].timestamp);
+
+        keys.forEach((cid, idx) => {
+            const c = commentsData[cid];
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment-item';
+            commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
+            if (shouldCollapse && !showAll && idx >= 2) {
+                commentItem.style.display = 'none';
+            }
+            commentList.appendChild(commentItem);
+        });
+
+        if (toggleBtn) {
+            toggleBtn.style.display = shouldCollapse ? 'inline-block' : 'none';
+            toggleBtn.innerText = showAll ? 'Fold the comments' : 'View all comments';
+        }
+    }
 
     // 提交留言
     submitBtn.addEventListener('click', function (e) {
