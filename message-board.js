@@ -24,10 +24,62 @@ document.addEventListener('DOMContentLoaded', function () {
     db.on('value', (snapshot) => {
         const data = snapshot.val();
         messagesContainer.innerHTML = '';
-        for (let id in data) {
+
+        const sortedEntries = Object.entries(data || {}).sort(
+    (a, b) => b[1].timestamp - a[1].timestamp
+        );
+
+        for (let [id, msg] of sortedEntries) {
             const msg = data[id];
             const messageEl = document.createElement('div');
             messageEl.className = 'message-bubble';
+
+            const commentList = document.createElement('div');
+            commentList.className = 'comment-list';
+
+            // comment list template
+            const commentForm = document.createElement('div');
+            commentForm.className = 'comment-form';
+            commentForm.innerHTML = `
+                <input type="text" class="comment-author" placeholder="Your name">
+                <input type="text" class="comment-text" placeholder="Write your comments...">
+                <button class="comment-submit" data-id="${id}">Submit</button>
+            `;
+
+            // comment list folder
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'toggle-comments';
+            toggleBtn.style.display = 'none';
+            let showAll = false;
+
+            function renderComments(commentsData) {
+                commentList.innerHTML = '';
+                const keys = Object.keys(commentsData || {});
+                const shouldCollapse = keys.length > 2;
+
+                keys.sort((a, b) => commentsData[a].timestamp - commentsData[b].timestamp);
+
+                keys.forEach((cid, idx) => {
+                    const c = commentsData[cid];
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
+                    if (shouldCollapse && !showAll && idx >= 2) {
+                        commentItem.style.display = 'none';
+                    }
+                    commentList.appendChild(commentItem);
+                });
+
+                toggleBtn.style.display = shouldCollapse ? 'inline-block' : 'none';
+                toggleBtn.innerText = showAll ? 'Fold the last comments' : 'View all comments';
+            }
+
+            toggleBtn.addEventListener('click', () => {
+                showAll = !showAll;
+                db.child(id).child('comments').once('value', snap => {
+                    renderComments(snap.val());
+                });
+            });
 
             messageEl.innerHTML = `
                 <div class="message-author">${msg.author}</div>
@@ -38,8 +90,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     <button class="delete-btn" data-id="${id}">🗑 delete</button>
                 </div>
             `;
+
+            // comments board
             messagesContainer.appendChild(messageEl);
+            messageEl.appendChild(toggleBtn);
+            messageEl.appendChild(commentForm);
+            messagesContainer.appendChild(messageEl);
+
+            // first load comments
+            db.child(id).child('comments').once('value', snap => {
+                renderComments(snap.val() || {});
+            });
         }
+
         // 点赞和评论删除功能
         const likeButtons = document.querySelectorAll('.like-btn');
         const deleteButtons = document.querySelectorAll('.delete-btn');
@@ -89,6 +152,29 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             alert('Please write a message!');
+        }
+    });
+
+     //  Submit comments
+    messagesContainer.addEventListener('click', function (e) {
+        if (e.target.classList.contains('comment-submit')) {
+            const id = e.target.getAttribute('data-id');
+            const form = e.target.closest('.comment-form');
+            const author = form.querySelector('.comment-author').value.trim() || 'Anonymous';
+            const text = form.querySelector('.comment-text').value.trim();
+
+            if (text) {
+                const comment = {
+                    author,
+                    text,
+                    timestamp: Date.now()
+                };
+                db.child(id).child('comments').push(comment);
+                form.querySelector('.comment-author').value = '';
+                form.querySelector('.comment-text').value = '';
+            } else {
+                alert("Please write a comment!");
+            }
         }
     });
 
