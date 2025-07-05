@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             // comments board
-            messagesContainer.appendChild(messageEl);
+            messageEl.appendChild(commentList);
             messageEl.appendChild(toggleBtn);
             messageEl.appendChild(commentForm);
             messagesContainer.appendChild(messageEl);
