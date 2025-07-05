@@ -110,6 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    function highlightNames(text) {
+        return text.replace(/(Relay to\s)([^：]+)(：)/, (_, a, b, c) => `${a}<strong style="color:#007bff">${b}</strong>${c}`);
+    }
+
     function renderComments(commentsData, commentList, toggleBtn, showAll) {
         commentList.innerHTML = '';
         const keys = Object.keys(commentsData);
@@ -121,11 +125,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const c = commentsData[cid];
             const commentItem = document.createElement('div');
             commentItem.className = 'comment-item';
-            commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
+            const formattedText = highlightNames(`<strong style="color:#007bff">${c.author}</strong>：${c.text}`);
+            commentItem.innerHTML = formattedText;
+            commentItem.style.marginLeft = `${idx * 16}px`;
       
             const replyBtn = document.createElement('button');
             replyBtn.className = 'reply-btn';
-            replyBtn.innerText = '<strong>Reply to';
+            replyBtn.innerText = 'reply';
             replyBtn.setAttribute('data-author', c.author);
             replyBtn.setAttribute('data-id', commentList.getAttribute('data-id'));
             commentItem.appendChild(replyBtn);
@@ -168,9 +174,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const replyForm = document.createElement('div');
             replyForm.className = 'reply-form';
             replyForm.innerHTML = `
-            <input type="text" class="reply-author" placeholder="Your name">
-            <input type="text" class="reply-text" placeholder="回复 ${replyTo}...">
-            <button class="reply-submit" data-id="${messageId}" data-replyto="${replyTo}">Submit</button>
+                <input type="text" class="reply-author" placeholder="Your name">
+                <input type="text" class="reply-text" placeholder="Reply to ${replyTo}...">
+                <button class="reply-submit" data-id="${messageId}" data-replyto="${replyTo}">Submit</button>
             `;
             commentListEl.appendChild(replyForm);
         } else if (e.target.classList.contains('reply-submit')) {

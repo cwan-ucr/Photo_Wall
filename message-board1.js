@@ -22,8 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const data = snapshot.val();
     messagesContainer.innerHTML = '';
 
-    const sortedEntries = Object.entries(data || {}).sort(
-        (a, b) => b[1].timestamp - a[1].timestamp);
+    const sortedEntries = Object.entries(data || {}).sort((a, b) => b[1].timestamp - a[1].timestamp);
 
     for (let [id, msg] of sortedEntries) {
       const messageEl = document.createElement('div');
@@ -93,6 +92,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  function highlightNames(text) {
+    return text.replace(/(回复\s)([^：]+)(：)/, (_, a, b, c) => `${a}<strong style="color:#007bff">${b}</strong>${c}`);
+  }
+
   function renderComments(commentsData, commentList, toggleBtn, showAll) {
     commentList.innerHTML = '';
     const keys = Object.keys(commentsData);
@@ -104,7 +107,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const c = commentsData[cid];
       const commentItem = document.createElement('div');
       commentItem.className = 'comment-item';
-      commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
+      const formattedText = highlightNames(`<strong style="color:#007bff">${c.author}</strong>：${c.text}`);
+      commentItem.innerHTML = formattedText;
       commentItem.style.marginLeft = `${idx * 16}px`;
 
       const replyBtn = document.createElement('button');
