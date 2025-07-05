@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
       
             const replyBtn = document.createElement('button');
             replyBtn.className = 'reply-btn';
-            replyBtn.innerText = 'reply';
+            replyBtn.innerText = '<strong>Reply to';
             replyBtn.setAttribute('data-author', c.author);
             replyBtn.setAttribute('data-id', commentList.getAttribute('data-id'));
             commentItem.appendChild(replyBtn);
@@ -168,9 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const replyForm = document.createElement('div');
             replyForm.className = 'reply-form';
             replyForm.innerHTML = `
-            <input type="text" class="reply-author" placeholder="你的名字">
+            <input type="text" class="reply-author" placeholder="Your name">
             <input type="text" class="reply-text" placeholder="回复 ${replyTo}...">
-            <button class="reply-submit" data-id="${messageId}" data-replyto="${replyTo}">发送</button>
+            <button class="reply-submit" data-id="${messageId}" data-replyto="${replyTo}">Submit</button>
             `;
             commentListEl.appendChild(replyForm);
         } else if (e.target.classList.contains('reply-submit')) {
