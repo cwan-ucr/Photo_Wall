@@ -123,10 +123,19 @@ document.addEventListener('DOMContentLoaded', function () {
             commentItem.className = 'comment-item';
             commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
             commentItem.style.marginLeft = `${idx * 16}px`; // Tab 16px for next comments
+      
+            const replyBtn = document.createElement('button');
+            replyBtn.className = 'reply-btn';
+            replyBtn.innerText = 'reply';
+            replyBtn.setAttribute('data-author', c.author);
+            replyBtn.setAttribute('data-id', commentList.getAttribute('data-id'));
+            commentItem.appendChild(replyBtn);
+
             if (shouldCollapse && !showAll && idx >= 2) {
             commentItem.style.display = 'none';
-          }
-          commentList.appendChild(commentItem);
+            }
+
+            commentList.appendChild(commentItem);
         });
 
         if (toggleBtn) {
@@ -137,28 +146,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
     messagesContainer.addEventListener('click', function (e) {
         if (e.target.classList.contains('comment-submit')) {
-          const id = e.target.getAttribute('data-id');
-          const form = e.target.closest('.comment-form');
-          const author = form.querySelector('.comment-author').value.trim() || 'Anonymous';
-          const text = form.querySelector('.comment-text').value.trim();
+            const id = e.target.getAttribute('data-id');
+            const form = e.target.closest('.comment-form');
+            const author = form.querySelector('.comment-author').value.trim() || 'Anonymous';
+            const text = form.querySelector('.comment-text').value.trim();
 
-          if (text) {
-            const comment = { author, text, timestamp: Date.now() };
+            if (text) {
+                const comment = { author, text, timestamp: Date.now() };
+                db.child(id).child('comments').push(comment);
+                form.querySelector('.comment-author').value = '';
+                form.querySelector('.comment-text').value = '';
+                } else {
+                alert('please write a comment');
+            }
+        } else if (e.target.classList.contains('reply-btn')) {
+            const replyTo = e.target.getAttribute('data-author');
+            const messageId = e.target.getAttribute('data-id');
+            const commentListEl = e.target.closest('.comment-list');
+
+            if (commentListEl.querySelector('.reply-form')) return;
+
+            const replyForm = document.createElement('div');
+            replyForm.className = 'reply-form';
+            replyForm.innerHTML = `
+            <input type="text" class="reply-author" placeholder="你的名字">
+            <input type="text" class="reply-text" placeholder="回复 ${replyTo}...">
+            <button class="reply-submit" data-id="${messageId}" data-replyto="${replyTo}">发送</button>
+            `;
+            commentListEl.appendChild(replyForm);
+        } else if (e.target.classList.contains('reply-submit')) {
+            const id = e.target.getAttribute('data-id');
+            const replyTo = e.target.getAttribute('data-replyto');
+            const form = e.target.closest('.reply-form');
+            const author = form.querySelector('.reply-author').value.trim() || 'Anonymous';
+            const textRaw = form.querySelector('.reply-text').value.trim();
+
+            if (textRaw) {
+                const comment = {
+                    author,
+                    text: `reply ${replyTo}：${textRaw}`,
+                    timestamp: Date.now()
+                };
             db.child(id).child('comments').push(comment);
-            form.querySelector('.comment-author').value = '';
-            form.querySelector('.comment-text').value = '';
-          } else {
-            alert('please write a comment');
+                form.remove();
+                } else {
+                alert('Please write a reply');
           }
         } else if (e.target.classList.contains('toggle-comments')) {
-          const id = e.target.getAttribute('data-id');
-          const commentListEl = document.querySelector(`.comment-list[data-id="${id}"]`);
-          const toggleBtnEl = e.target;
-          const isExpanded = toggleBtnEl.getAttribute('data-expanded') === 'true';
-          db.child(id).child('comments').once('value', snap => {
-            renderComments(snap.val() || {}, commentListEl, toggleBtnEl, !isExpanded);
-          });
-          toggleBtnEl.setAttribute('data-expanded', String(!isExpanded));
+            const id = e.target.getAttribute('data-id');
+            const commentListEl = document.querySelector(`.comment-list[data-id="${id}"]`);
+            const toggleBtnEl = e.target;
+            const isExpanded = toggleBtnEl.getAttribute('data-expanded') === 'true';
+            db.child(id).child('comments').once('value', snap => {
+                renderComments(snap.val() || {}, commentListEl, toggleBtnEl, !isExpanded);
+            });
+            toggleBtnEl.setAttribute('data-expanded', String(!isExpanded));
         }
     });
 
