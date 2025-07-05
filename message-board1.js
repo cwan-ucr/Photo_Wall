@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const data = snapshot.val();
     messagesContainer.innerHTML = '';
 
-    const sortedEntries = Object.entries(data || {}).sort((a, b) => b[1].timestamp - a[1].timestamp);
+    const sortedEntries = Object.entries(data || {}).sort(
+        (a, b) => b[1].timestamp - a[1].timestamp);
 
     for (let [id, msg] of sortedEntries) {
       const messageEl = document.createElement('div');
@@ -34,8 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const toggleBtn = document.createElement('button');
       toggleBtn.className = 'toggle-comments';
-      toggleBtn.setAttribute('data-id', id);
       toggleBtn.style.display = 'none';
+      toggleBtn.setAttribute('data-id', id);
       toggleBtn.innerText = '查看全部评论';
 
       const commentForm = document.createElement('div');
@@ -61,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
       messageEl.appendChild(commentForm);
       messagesContainer.appendChild(messageEl);
 
-      // 加载评论
       setTimeout(() => {
         db.child(id).child('comments').once('value', snap => {
           const commentListEl = document.querySelector(`.comment-list[data-id="${id}"]`);
@@ -105,9 +105,19 @@ document.addEventListener('DOMContentLoaded', function () {
       const commentItem = document.createElement('div');
       commentItem.className = 'comment-item';
       commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
+      commentItem.style.marginLeft = `${idx * 16}px`;
+
+      const replyBtn = document.createElement('button');
+      replyBtn.className = 'reply-btn';
+      replyBtn.innerText = '回复';
+      replyBtn.setAttribute('data-author', c.author);
+      replyBtn.setAttribute('data-id', commentList.getAttribute('data-id'));
+      commentItem.appendChild(replyBtn);
+
       if (shouldCollapse && !showAll && idx >= 2) {
         commentItem.style.display = 'none';
       }
+
       commentList.appendChild(commentItem);
     });
 
@@ -130,7 +140,40 @@ document.addEventListener('DOMContentLoaded', function () {
         form.querySelector('.comment-author').value = '';
         form.querySelector('.comment-text').value = '';
       } else {
-        alert('请填写评论内容');
+        alert('请输入评论内容');
+      }
+    } else if (e.target.classList.contains('reply-btn')) {
+      const replyTo = e.target.getAttribute('data-author');
+      const messageId = e.target.getAttribute('data-id');
+      const commentListEl = e.target.closest('.comment-list');
+
+      if (commentListEl.querySelector('.reply-form')) return;
+
+      const replyForm = document.createElement('div');
+      replyForm.className = 'reply-form';
+      replyForm.innerHTML = `
+        <input type="text" class="reply-author" placeholder="你的名字">
+        <input type="text" class="reply-text" placeholder="回复 ${replyTo}...">
+        <button class="reply-submit" data-id="${messageId}" data-replyto="${replyTo}">发送</button>
+      `;
+      commentListEl.appendChild(replyForm);
+    } else if (e.target.classList.contains('reply-submit')) {
+      const id = e.target.getAttribute('data-id');
+      const replyTo = e.target.getAttribute('data-replyto');
+      const form = e.target.closest('.reply-form');
+      const author = form.querySelector('.reply-author').value.trim() || 'Anonymous';
+      const textRaw = form.querySelector('.reply-text').value.trim();
+
+      if (textRaw) {
+        const comment = {
+          author,
+          text: `回复 ${replyTo}：${textRaw}`,
+          timestamp: Date.now()
+        };
+        db.child(id).child('comments').push(comment);
+        form.remove();
+      } else {
+        alert('请输入回复内容');
       }
     } else if (e.target.classList.contains('toggle-comments')) {
       const id = e.target.getAttribute('data-id');
@@ -150,7 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const author = nameInput.value.trim() || 'Anonymous';
 
     if (text) {
-      const newMsg = { text, author, timestamp: Date.now(), likes: 0 };
+      const newMsg = {
+        text,
+        author,
+        timestamp: Date.now(),
+        likes: 0
+      };
       db.push(newMsg);
       messageInput.value = '';
       nameInput.value = '';

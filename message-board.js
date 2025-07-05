@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const commentItem = document.createElement('div');
             commentItem.className = 'comment-item';
             commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
-            commentItem.style.marginLeft = `${idx * 16}px`; // Tab 16px for next comments
       
             const replyBtn = document.createElement('button');
             replyBtn.className = 'reply-btn';
@@ -184,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (textRaw) {
                 const comment = {
                     author,
-                    text: `reply ${replyTo}：${textRaw}`,
+                    text: `Reply to ${replyTo}：${textRaw}`,
                     timestamp: Date.now()
                 };
             db.child(id).child('comments').push(comment);
