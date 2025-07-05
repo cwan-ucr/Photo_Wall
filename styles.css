@@ -429,9 +429,15 @@ body {
 }
 
 .comment-item {
-    margin-bottom: 5px;
-    color: #444;
+  transition: all 0.3s ease;
+  border-left: 2px solid #f2f2f2;
+  padding-left: 6px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #444;
+  background: rgba(255,255,255,0.6);
 }
+
 
 .comment-form {
     display: flex;

@@ -118,11 +118,12 @@ document.addEventListener('DOMContentLoaded', function () {
         keys.sort((a, b) => commentsData[a].timestamp - commentsData[b].timestamp);
 
         keys.forEach((cid, idx) => {
-          const c = commentsData[cid];
-          const commentItem = document.createElement('div');
-          commentItem.className = 'comment-item';
-          commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
-          if (shouldCollapse && !showAll && idx >= 2) {
+            const c = commentsData[cid];
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment-item';
+            commentItem.innerHTML = `<strong>${c.author}：</strong>${c.text}`;
+            commentItem.style.marginLeft = `${idx * 16}px`; // Tab 16px for next comments
+            if (shouldCollapse && !showAll && idx >= 2) {
             commentItem.style.display = 'none';
           }
           commentList.appendChild(commentItem);
