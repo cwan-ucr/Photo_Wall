@@ -179,6 +179,21 @@ main {
     transform: translate(-50%, -50%);
 }
 
+/* ======= BGM 控制器 ======= */
+#bgmControls {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#bgmProgress,
+#bgmVolume {
+    flex: 1;
+    height: 6px;
+    cursor: pointer;
+}
+
 
 #closeBtn {
     position: absolute;

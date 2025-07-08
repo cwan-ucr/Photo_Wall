@@ -234,6 +234,29 @@ window.onload = function () {
     const audio = document.getElementById('bgm');
     const selector = document.getElementById('bgmSelector');
 
+    const progress = document.getElementById('bgmProgress');
+    const volume = document.getElementById('bgmVolume');
+
+    // 音量控制
+    volume.addEventListener('input', () => {
+        audio.volume = volume.value / 100;
+    });
+
+    // 进度条拖动
+    progress.addEventListener('input', () => {
+        if (audio.duration) {
+            audio.currentTime = audio.duration * (progress.value / 100);
+        }
+    });
+
+    // 更新进度条（自动）
+    audio.addEventListener('timeupdate', () => {
+        if (audio.duration) {
+            progress.value = (audio.currentTime / audio.duration) * 100;
+        }
+    });
+
+
     // 设置初始播放
     audio.src = selector.value;
 
