@@ -213,67 +213,64 @@ window.addEventListener('keydown', function (event) {
 
 // Load the initial images and set up event listeners
 window.onload = function () {
-    calculateLoveDays();
-
-    loadImages(initialBatchCount).then(() => {
-        window.addEventListener('scroll', handleScroll);
-    });
-
-    document.getElementById('closeBtn').addEventListener('click', closePopup);
-
-    leftArrow = document.getElementById('leftArrow');
-    rightArrow = document.getElementById('rightArrow');
-
-    leftArrow.addEventListener('click', showPreviousImage);
-    rightArrow.addEventListener('click', showNextImage);
-
-    leftArrow.style.display = 'none';
-    rightArrow.style.display = 'none';
-
-    // ==== 初始化背景音乐播放和切换 ====
     const audio = document.getElementById('bgm');
     const selector = document.getElementById('bgmSelector');
-
     const progress = document.getElementById('bgmProgress');
     const volume = document.getElementById('bgmVolume');
+    const playPauseBtn = document.getElementById('bgmPlayPause');
+    const timeDisplay = document.getElementById('bgmTime');
+    let isPlaying = false;
 
-    // 音量控制
+    function formatTime(seconds) {
+        const min = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return `${min}:${sec}`;
+    }
+
+    audio.src = selector.value;
+
+    document.body.addEventListener('click', () => {
+        audio.play().then(() => isPlaying = true).catch(() => console.log("浏览器阻止了自动播放"));
+    }, { once: true });
+
+    selector.addEventListener('change', function () {
+        audio.src = this.value;
+        audio.play();
+        isPlaying = true;
+        playPauseBtn.innerHTML = '⏸️';
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            playPauseBtn.innerHTML = '▶️';
+        } else {
+            audio.play();
+            playPauseBtn.innerHTML = '⏸️';
+        }
+        isPlaying = !isPlaying;
+    });
+
     volume.addEventListener('input', () => {
         audio.volume = volume.value / 100;
     });
 
-    // 进度条拖动
     progress.addEventListener('input', () => {
         if (audio.duration) {
             audio.currentTime = audio.duration * (progress.value / 100);
         }
     });
 
-    // 更新进度条（自动）
     audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
             progress.value = (audio.currentTime / audio.duration) * 100;
+            if (timeDisplay) {
+                timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+            }
         }
     });
-
-
-    // 设置初始播放
-    audio.src = selector.value;
-
-    // 用户首次交互后播放（防止浏览器拦截）
-    document.body.addEventListener('click', () => {
-        audio.play().catch(() => {
-            console.log("浏览器阻止了自动播放，需要用户交互");
-        });
-    }, { once: true });
-
-    // 切换 BGM 时更新音源并播放
-    selector.addEventListener('change', function () {
-        audio.src = this.value;
-        audio.play();
-    });
-    
 };
+
 
 // 时间格式化辅助函数
 function formatDate(timestamp) {

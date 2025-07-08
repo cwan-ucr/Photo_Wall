@@ -181,18 +181,30 @@ main {
 
 /* ======= BGM 控制器 ======= */
 #bgmControls {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+#bgmSelector {
+  height: 28px;
+}
+#bgmPlayPause {
+  font-size: 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+#bgmProgress, #bgmVolume {
+  width: 100px;
+  height: 6px;
+  cursor: pointer;
+}
+#bgmTime {
+  font-size: 12px;
+  min-width: 80px;
 }
 
-#bgmProgress,
-#bgmVolume {
-    flex: 1;
-    height: 6px;
-    cursor: pointer;
-}
 
 
 #closeBtn {
