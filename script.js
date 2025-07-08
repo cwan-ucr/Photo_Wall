@@ -213,6 +213,23 @@ window.addEventListener('keydown', function (event) {
 
 // Load the initial images and set up event listeners
 window.onload = function () {
+        calculateLoveDays();
+
+    loadImages(initialBatchCount).then(() => {
+        window.addEventListener('scroll', handleScroll);
+    });
+
+    document.getElementById('closeBtn').addEventListener('click', closePopup);
+
+    leftArrow = document.getElementById('leftArrow');
+    rightArrow = document.getElementById('rightArrow');
+
+    leftArrow.addEventListener('click', showPreviousImage);
+    rightArrow.addEventListener('click', showNextImage);
+
+    leftArrow.style.display = 'none';
+    rightArrow.style.display = 'none';
+
     const audio = document.getElementById('bgm');
     const selector = document.getElementById('bgmSelector');
     const progress = document.getElementById('bgmProgress');
@@ -252,7 +269,9 @@ window.onload = function () {
     });
 
     volume.addEventListener('input', () => {
-        audio.volume = volume.value / 100;
+        if (audio.duration) {
+            audio.currentTime = audio.duration * (progress.value / 100);
+        }
     });
 
     progress.addEventListener('input', () => {
