@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>话语瓶 | Our Love Journey</title>
+    <link rel="stylesheet" href="styles.css?v=event-center">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+</head>
+
+<body class="bottle-page">
+    <canvas id="heartCanvas"></canvas>
+
+    <nav class="site-nav">
+        <div class="container nav-content">
+            <a href="index.html" class="site-logo">Our Love Journey</a>
+            <div class="nav-buttons">
+                <a href="index.html#map-section" class="nav-button">情侣地图</a>
+                <a href="index.html#gallery-section" class="nav-button">相册</a>
+                <a href="bottle-game.html" class="nav-button active">话语瓶</a>
+                <button id="bottleEditToggle" class="nav-button edit-mode-toggle" type="button" hidden>开启编辑</button>
+                <a href="message-board.html" class="nav-button nav-button-primary">留言板</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="bottle-main">
+        <section class="bottle-hero">
+            <div class="container bottle-layout">
+                <div class="bottle-copy">
+                    <p class="eyebrow">Little Game</p>
+                    <h1>话语瓶</h1>
+                    <p>把想念、约定、鼓励和小秘密装进瓶子，摇一摇，随机倒出一句。</p>
+                    <div id="bottleAuth" class="bottle-auth">
+                        <button id="bottleLoginBtn" type="button">Google 登录后同步</button>
+                        <div id="bottleUserInfo" class="bottle-user" hidden>
+                            <img id="bottleUserPhoto" src="" alt="">
+                            <span id="bottleUserName"></span>
+                            <button id="bottleLogoutBtn" type="button">退出</button>
+                        </div>
+                    </div>
+                    <p id="bottleSyncStatus" class="sync-status">正在连接云端同步...</p>
+                </div>
+
+                <div class="bottle-stage">
+                    <button id="shakeBottleBtn" class="bottle-jar" type="button" aria-label="摇一摇话语瓶">
+                        <span class="bottle-neck"></span>
+                        <span class="bottle-glass">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <strong id="bottleCount">0</strong>
+                        </span>
+                    </button>
+                    <div id="bottleResult" class="bottle-result">先装进一句话。</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bottle-editor-section owner-edit-only">
+            <div class="container bottle-editor-grid">
+                <form id="bottleForm" class="bottle-form">
+                    <textarea id="bottleTextInput" placeholder="装进一句话" maxlength="160" required></textarea>
+                    <div>
+                        <input id="bottleTagInput" type="text" placeholder="标签" maxlength="16">
+                        <button type="submit">放进瓶子</button>
+                    </div>
+                </form>
+                <div id="bottleNoteList" class="bottle-note-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="mobile-tab-nav" aria-label="移动端导航">
+        <a href="index.html">首页</a>
+        <a href="index.html#timeline">时光</a>
+        <a href="index.html#gallery-section">相册</a>
+        <a href="index.html#map-section">地图</a>
+        <a href="message-board.html">留言</a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="bottle-game.js"></script>
+    <script src="hearts.js"></script>
+</body>
+</html>

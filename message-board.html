@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Our Love Journey - Message Board</title>
+    <link rel="stylesheet" href="styles.css?v=event-center">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+
+<body>
+    <canvas id="heartCanvas"></canvas>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <h1>Our Love Journey</h1>
+                <div class="nav-buttons">
+                    <a href="index.html" class="nav-button">home</a>
+                    <a href="message-board.html" class="nav-button active">Message Board</a>
+                </div>
+                <h1>最最亲爱的人呐，路途遥远我们在一起吧~</h1>
+            </div>
+        </div>
+    </nav>
+
+    <main class="message-board">
+        <section id="guestbook">
+            <h2>💌 Sweet Message Board</h2>
+
+            <div id="auth-container">
+                <button id="loginBtn">Login with Google</button>
+                <div id="userInfo" style="display: none;">
+                    <img id="userPhoto" src="" alt="User Photo" style="width: 40px; height: 40px; border-radius: 50%;">
+                    <span id="userNameDisplay"></span>
+                    <button id="logoutBtn">Logout</button>
+                </div>
+            </div>
+
+            <div class="message-input" id="message-form" style="display: none;">
+                <textarea id="messageText" placeholder="Write your blessing..." maxlength="200"></textarea>
+                <button id="submitMessage">❤ Send Message</button>
+                <button id="exportMessages">💾 Export Messages</button>
+            </div>
+            <div id="messagesContainer">
+                </div>
+        </section>
+    </main>
+
+    <nav class="mobile-tab-nav" aria-label="移动端导航">
+        <a href="index.html">首页</a>
+        <a href="index.html#timeline">时光</a>
+        <a href="index.html#gallery-section">相册</a>
+        <a href="index.html#map-section">地图</a>
+        <a href="message-board.html">留言</a>
+    </nav>
+
+    <script src="hearts.js"></script>
+    <script src="message-board.js"></script>
+</body>
+</html>

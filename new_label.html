@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的爱的小窝</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="new_styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#hero" class="logo">Our Story</a>
+            <ul class="nav-links">
+                <li><a href="#timeline">时光轴</a></li>
+                <li><a href="#gallery">影像馆</a></li>
+                <li><a href="#bucketlist">愿望清单</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h1 id="couple-names">Jack & Rose</h1>
+            <p class="subtitle">记录我们相爱的点点滴滴</p>
+            
+            <div class="love-counter-box">
+                <p>我们已经相爱了：</p>
+                <div id="counter">计算中...</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-container">
+
+        <section id="timeline" class="section-block">
+            <h2 class="section-title">我们的时光轴 ✨</h2>
+            <div class="timeline-container" id="timeline-list">
+                </div>
+        </section>
+
+        <section id="gallery" class="section-block">
+            <h2 class="section-title">甜蜜影像馆 📷</h2>
+            <div class="gallery-grid" id="gallery-list">
+                </div>
+        </section>
+
+        <section id="bucketlist" class="section-block">
+             <h2 class="section-title">未来愿望清单 📝</h2>
+             <ul class="bucket-list-container" id="bucket-list">
+                 </ul>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Made with ❤️ for my love. <span id="footer-year"></span></p>
+    </footer>
+
+    <script src="new_data.js"></script>
+    <script src="new_script.js"></script>
+</body>
+</html>

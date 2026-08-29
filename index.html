@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changxin & Qinxin | Our Love Journey</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="styles.css?v=event-center">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
+</head>
+
+<body class="home-page">
+    <canvas id="heartCanvas"></canvas>
+
+    <nav class="site-nav">
+        <div class="container nav-content">
+            <a href="#top" class="site-logo">Our Love Journey</a>
+            <div class="nav-buttons">
+                <a href="#event-center" class="nav-button">事件</a>
+                <a href="#timeline" class="nav-button">时光轴</a>
+                <a href="#gallery-section" class="nav-button">相册</a>
+                <a href="#wishlist" class="nav-button">愿望</a>
+                <a href="bottle-game.html" class="nav-button">小游戏</a>
+                <button id="globalEditToggle" class="nav-button edit-mode-toggle" type="button" hidden>开启编辑</button>
+                <a href="message-board.html" class="nav-button nav-button-primary">留言板</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="editModeBanner" class="edit-mode-banner owner-edit-only">
+        <div class="container edit-mode-banner-inner">
+            <span>编辑模式已开启 · 改动会自动同步</span>
+            <button id="editModeCloseBtn" type="button">关闭</button>
+        </div>
+    </div>
+
+    <main id="top">
+        <section class="hero-section">
+            <div class="hero-media" aria-hidden="true"></div>
+            <div class="container hero-layout">
+                <div class="hero-copy">
+                    <p class="eyebrow">Changxin & Qinxin</p>
+                    <h1>最最亲爱的人呐，路途遥远我们在一起吧</h1>
+                    <p class="hero-subtitle">把相遇、相爱、旅行、日常和祝福都收在这里，慢慢写成只属于我们的故事。</p>
+
+                    <div class="hero-actions">
+                        <a href="#gallery-section" class="button button-primary">查看相册</a>
+                        <a href="message-board.html" class="button button-secondary">写下留言</a>
+                        <label class="button button-secondary hero-upload-button owner-edit-only">
+                            替换封面
+                            <input id="heroCoverInput" type="file" accept="image/*">
+                        </label>
+                    </div>
+                </div>
+
+                <aside class="hero-panel" aria-label="恋爱信息">
+                    <div class="counter-card">
+                        <span>We have been in love for</span>
+                        <strong><span id="loveDays">0</span> Days</strong>
+                        <small>Since 2025.06.16</small>
+                    </div>
+
+                    <div class="date-grid">
+                        <div class="birthday-card">
+                            <img id="hisAvatar" class="birthday-avatar" alt="His avatar">
+                            <label class="avatar-upload owner-edit-only">
+                                更换
+                                <input id="hisAvatarInput" type="file" accept="image/*">
+                            </label>
+                            <span>His Birthday</span>
+                            <strong>2001.02.21</strong>
+                        </div>
+                        <div class="birthday-card">
+                            <img id="herAvatar" class="birthday-avatar" alt="Her avatar">
+                            <label class="avatar-upload owner-edit-only">
+                                更换
+                                <input id="herAvatarInput" type="file" accept="image/*">
+                            </label>
+                            <span>Her Birthday</span>
+                            <strong>2000.10.25</strong>
+                        </div>
+                    </div>
+                    <p class="hero-edit-hint owner-edit-only">头像/封面需要登录后修改，状态会显示在愿望清单同步提示里。</p>
+
+                    <div class="music-card">
+                        <span>Today's song</span>
+                        <p>暂未添加音乐</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="entry-section">
+            <div class="container entry-grid">
+                <a href="#event-center" class="entry-card">
+                    <span>00</span>
+                    <strong>事件中心</strong>
+                    <p>把相册、地图、愿望和时光轴串成完整回忆。</p>
+                </a>
+                <a href="#timeline" class="entry-card">
+                    <span>01</span>
+                    <strong>点点滴滴</strong>
+                    <p>记录我们之间值得反复回看的小事。</p>
+                </a>
+                <a href="#gallery-section" class="entry-card">
+                    <span>02</span>
+                    <strong>Love Photo</strong>
+                    <p>把最美的瞬间放进同一个相册。</p>
+                </a>
+                <a href="#wishlist" class="entry-card">
+                    <span>03</span>
+                    <strong>Love List</strong>
+                    <p>收藏未来想一起完成的约定。</p>
+                </a>
+                <a href="message-board.html" class="entry-card">
+                    <span>04</span>
+                    <strong>留言板</strong>
+                    <p>给我们写下一句祝福或悄悄话。</p>
+                </a>
+                <a href="bottle-game.html" class="entry-card">
+                    <span>05</span>
+                    <strong>话语瓶</strong>
+                    <p>把想说的话装进去，随机倒出一句。</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="event-center" class="content-section tinted-section">
+            <div class="container section-layout">
+                <div class="section-heading">
+                    <p class="eyebrow">Event Hub</p>
+                    <h2>事件中心</h2>
+                    <p class="section-note">一个事件可以关联相册、地点、愿望和时光轴记录。</p>
+                </div>
+                <div class="event-panel">
+                    <form id="eventForm" class="event-form owner-edit-only">
+                        <input id="eventTitleInput" type="text" placeholder="事件名称" maxlength="40" required>
+                        <input id="eventDateInput" type="date" required>
+                        <input id="eventLocationInput" type="text" placeholder="地点" maxlength="60">
+                        <select id="eventStatusInput" aria-label="事件状态">
+                            <option value="done">已完成</option>
+                            <option value="planned">计划中</option>
+                            <option value="wish">想实现</option>
+                        </select>
+                        <textarea id="eventDescriptionInput" placeholder="这件事的故事" maxlength="220" required></textarea>
+                        <div class="event-link-grid">
+                            <label>关联相册<select id="eventAlbumSelect"><option value="">不关联</option></select></label>
+                            <label>关联地点<select id="eventPlaceSelect"><option value="">不关联</option></select></label>
+                            <label>关联愿望<select id="eventWishSelect"><option value="">不关联</option></select></label>
+                            <label>关联时光轴<select id="eventTimelineSelect"><option value="">不关联</option></select></label>
+                        </div>
+                        <button type="submit">添加事件</button>
+                    </form>
+                    <p id="eventSyncStatus" class="sync-status">登录后可以编辑事件中心。</p>
+                    <div id="eventList" class="event-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="content-section">
+            <div class="container section-layout">
+                <div class="section-heading">
+                    <p class="eyebrow">Timeline</p>
+                    <h2>我们的时光轴</h2>
+                    <p class="section-note">只露出最近三条，向下滚动可以回看更早的故事。</p>
+                </div>
+                <div class="timeline-panel">
+                    <form id="timelineForm" class="timeline-form owner-edit-only">
+                        <input id="timelineDateInput" type="date" required>
+                        <input id="timelineTitleInput" type="text" placeholder="新的时光事件" maxlength="40" required>
+                        <textarea id="timelineDescriptionInput" placeholder="这一天发生了什么" maxlength="180" required></textarea>
+                        <button type="submit">添加事件</button>
+                    </form>
+                    <p id="timelineSyncStatus" class="sync-status">登录后可以编辑时光轴。</p>
+                    <div id="timelineList" class="timeline-list" aria-label="我们的时光轴"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wishlist" class="content-section tinted-section">
+            <div class="container section-layout">
+                <div class="section-heading">
+                    <p class="eyebrow">Love List</p>
+                    <h2>未来愿望清单</h2>
+                    <p class="section-note">可以直接编辑事件、预计时间、完成状态，也可以用上下箭头调整优先级。</p>
+                </div>
+                <div class="wishlist-panel">
+                    <div id="wishlistAuth" class="wishlist-auth">
+                        <button id="wishlistLoginBtn" type="button">Google 登录后同步</button>
+                        <div id="wishlistUserInfo" class="wishlist-user" hidden>
+                            <img id="wishlistUserPhoto" src="" alt="">
+                            <span id="wishlistUserName"></span>
+                            <button id="wishlistLogoutBtn" type="button">退出</button>
+                        </div>
+                    </div>
+                    <div id="privacyPanel" class="privacy-panel owner-edit-only">
+                        <div>
+                            <strong>隐私设置</strong>
+                            <span>控制访客可以看到哪些内容。</span>
+                        </div>
+                        <label>
+                            整站状态
+                            <select id="sitePublicSelect">
+                                <option value="public">公开展示</option>
+                                <option value="private">仅我们可见</option>
+                            </select>
+                        </label>
+                        <div class="privacy-module-grid">
+                            <label><input type="checkbox" data-privacy-module="timeline"> 时光轴</label>
+                            <label><input type="checkbox" data-privacy-module="events"> 事件中心</label>
+                            <label><input type="checkbox" data-privacy-module="wishlist"> 愿望</label>
+                            <label><input type="checkbox" data-privacy-module="capsules"> 胶囊</label>
+                            <label><input type="checkbox" data-privacy-module="map"> 地图</label>
+                            <label><input type="checkbox" data-privacy-module="albums"> 相册</label>
+                            <label><input type="checkbox" data-privacy-module="messages"> 留言板</label>
+                            <label><input type="checkbox" data-privacy-module="bottleNotes"> 话语瓶</label>
+                        </div>
+                    </div>
+                    <form id="wishlistForm" class="wishlist-form owner-edit-only">
+                        <input id="wishTitleInput" type="text" placeholder="新的约定" maxlength="40" required>
+                        <input id="wishDateInput" type="date" required>
+                        <button type="submit">添加</button>
+                    </form>
+                    <p id="wishlistSyncStatus" class="sync-status">正在连接云端同步...</p>
+                    <div id="wishlistList" class="wishlist-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="privateNotice" class="private-notice" hidden>
+            <div class="container private-notice-inner">
+                <p class="eyebrow">Private</p>
+                <h2>这里暂时只对我们开放</h2>
+                <p>登录被授权的 Google 账号后，可以查看和编辑完整内容。</p>
+                <button id="privateLoginBtn" type="button">Google 登录</button>
+            </div>
+        </section>
+
+        <section id="capsules" class="content-section">
+            <div class="container section-layout">
+                <div class="section-heading">
+                    <p class="eyebrow">Time Capsule</p>
+                    <h2>时间胶囊</h2>
+                    <p class="section-note">写给未来的悄悄话，到设定日期之后才会解锁显示。</p>
+                </div>
+                <div class="capsule-panel">
+                    <form id="capsuleForm" class="capsule-form owner-edit-only">
+                        <input id="capsuleTitleInput" type="text" placeholder="胶囊标题" maxlength="40" required>
+                        <input id="capsuleUnlockInput" type="date" required>
+                        <textarea id="capsuleMessageInput" placeholder="写给未来的话" maxlength="300" required></textarea>
+                        <button type="submit">封存胶囊</button>
+                    </form>
+                    <p id="capsuleSyncStatus" class="sync-status">登录后可以创建和同步时间胶囊。</p>
+                    <div id="capsuleList" class="capsule-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="map-section" class="content-section tinted-section">
+            <div class="container section-layout">
+                <div class="section-heading">
+                    <p class="eyebrow">Love Map</p>
+                    <h2>情侣地图</h2>
+                    <p class="section-note">把去过或想去的地方标记下来，每个地点都能写下故事。</p>
+                </div>
+                <div class="map-panel" data-map-mode="geojson">
+                    <div class="map-tools owner-edit-only">
+                        <label class="map-upload">
+                            导入 GeoJSON 地图
+                            <input id="mapImageInput" type="file" accept=".json,.geojson,application/geo+json,application/json">
+                        </label>
+                        <button id="currentLocationBtn" type="button">显示当前位置</button>
+                    </div>
+                    <form id="placeForm" class="place-form owner-edit-only">
+                        <input id="placeTitleInput" type="text" placeholder="地点名称" maxlength="40" required>
+                        <input id="placeDateInput" type="date" required>
+                        <input id="placeLocationInput" type="text" placeholder="城市 / 地区" maxlength="80" list="mapRegionOptions" required>
+                        <datalist id="mapRegionOptions"></datalist>
+                        <select id="placeStatusInput" aria-label="地点状态">
+                            <option value="visited">去过</option>
+                            <option value="wish">想去</option>
+                        </select>
+                        <input id="placeColorInput" type="color" value="#c95f66" aria-label="标记颜色">
+                        <input id="placePhotoInput" type="file" accept="image/*" aria-label="地点照片">
+                        <textarea id="placeStoryInput" placeholder="这里发生了什么" maxlength="220" required></textarea>
+                        <button type="submit">添加地点</button>
+                    </form>
+                    <p id="mapSyncStatus" class="sync-status">登录后可以编辑情侣地图。</p>
+                    <div class="love-map-canvas" id="loveMapCanvas"></div>
+                    <div id="placeList" class="place-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery-section" class="content-section gallery-section">
+            <div class="container">
+                <div class="gallery-heading">
+                    <div class="section-heading">
+                        <p class="eyebrow">Love Photo</p>
+                        <h2>甜蜜影像馆</h2>
+                    </div>
+                    <p>每个事件都是一个相册文件夹，点开后查看这个事件里的照片和回忆。</p>
+                </div>
+                <form id="albumForm" class="album-form owner-edit-only">
+                    <input id="albumTitleInput" type="text" placeholder="新事件名称" maxlength="40" required>
+                    <input id="albumDateInput" type="date" required>
+                    <input id="albumDescriptionInput" type="text" placeholder="事件描述" maxlength="100" required>
+                    <button type="submit">添加事件相册</button>
+                </form>
+                <p id="albumSyncStatus" class="sync-status">登录后可以编辑相册、上传图片和设置封面。</p>
+                <div id="albumToolbar" class="album-toolbar" hidden>
+                    <button id="backToAlbums" type="button">返回影像馆</button>
+                    <div>
+                        <strong id="albumViewTitle"></strong>
+                        <span id="albumViewMeta"></span>
+                    </div>
+                </div>
+                <div id="albumEditor" class="album-editor owner-edit-only" hidden>
+                    <div class="album-edit-fields">
+                        <input id="albumEditTitle" type="text" placeholder="事件名称" maxlength="40">
+                        <input id="albumEditDate" type="date">
+                        <input id="albumEditDescription" type="text" placeholder="事件描述" maxlength="100">
+                        <button id="albumSaveBtn" type="button">保存事件</button>
+                    </div>
+                    <div class="album-upload-row">
+                        <input id="albumUploadInput" type="file" accept="image/*" multiple>
+                        <button id="albumUploadBtn" type="button">上传到当前相册</button>
+                    </div>
+                </div>
+                <div id="gallery" class="album-grid"></div>
+            </div>
+        </section>
+
+        <section class="message-cta">
+            <div class="container message-cta-inner">
+                <div>
+                    <p class="eyebrow">Message Board</p>
+                    <h2>把祝福和想说的话留在这里</h2>
+                </div>
+                <div class="message-cta-actions">
+                    <a href="bottle-game.html" class="button button-secondary">打开话语瓶</a>
+                    <a href="message-board.html" class="button button-primary">进入留言板</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="popup">
+        <span id="closeBtn">&times;</span>
+        <p id="imgDate"></p>
+        <img id="popupImg" src="" alt="Large Image">
+    </div>
+
+    <div id="leftArrow" class="arrow">❮</div>
+    <div id="rightArrow" class="arrow">❯</div>
+
+    <nav class="mobile-tab-nav" aria-label="移动端导航">
+        <a href="#top">首页</a>
+        <a href="#event-center">事件</a>
+        <a href="#timeline">时光</a>
+        <a href="#gallery-section">相册</a>
+        <a href="#map-section">地图</a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+    <script src="script.js"></script>
+    <script src="hearts.js"></script>
+</body>
+</html>
